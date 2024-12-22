@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff7eb3, #ff758c);
+            color: #fff;
+        }
+        .container {
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .container h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+        }
+        .container button {
+            background: #ff5a5f;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .container button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+        .container button:hover:enabled {
+            background: #ff7e83;
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Send a Message</h1>
+        <input type="text" id="message" placeholder="Enter your message" />
+        <button id="submit" onclick="sendMessage()">Submit</button>
+        <div class="message" id="status"></div>
+    </div>
+
+    <script>
+        const webhookUrl = "https://discord.com/api/webhooks/1320455079266091108/Q15i23Vh-R3unWBkqes189bARmS5L-cNW9ZOx9PYHqygoSBOpv8U7yEB8LuoMvs74rRf";
+        let cooldown = false;
+
+        async function sendMessage() {
+            const messageBox = document.getElementById('message');
+            const status = document.getElementById('status');
+            const submitButton = document.getElementById('submit');
+
+            const message = messageBox.value.trim();
+            if (!message) {
+                status.textContent = "Please enter a message.";
+                return;
+            }
+
+            if (cooldown) {
+                status.textContent = "You must wait 100 seconds before sending another message.";
+                return;
+            }
+
+            cooldown = true;
+            submitButton.disabled = true;
+            status.textContent = "Sending...";
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ content: message })
+                });
+
+                if (response.ok) {
+                    status.textContent = "Message sent successfully!";
+                    messageBox.value = "";
+                } else {
+                    status.textContent = `Error: ${response.statusText}`;
+                }
+            } catch (error) {
+                status.textContent = `Error: ${error.message}`;
+            } finally {
+                setTimeout(() => {
+                    cooldown = false;
+                    submitButton.disabled = false;
+                    status.textContent = "";
+                }, 100000);
+            }
+        }
+    </script>
+</body>
+</html>
