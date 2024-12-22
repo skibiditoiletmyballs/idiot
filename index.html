@@ -8,53 +8,57 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #ff7eb3, #ff758c);
+            min-height: 100vh;
             color: #fff;
         }
         .container {
-            background: #222;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: #1e1e2f;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
             text-align: center;
-            max-width: 400px;
             width: 100%;
+            max-width: 400px;
         }
         .container h1 {
             margin-bottom: 20px;
-            font-size: 24px;
+            font-size: 28px;
+            color: #ffffff;
         }
         .container input[type="text"] {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 20px;
-            border: none;
-            border-radius: 5px;
+            border: 2px solid #575757;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
         }
         .container button {
-            background: #ff5a5f;
+            background: #2575fc;
             border: none;
             color: #fff;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 16px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s;
         }
         .container button:disabled {
-            background: #aaa;
+            background: #575757;
             cursor: not-allowed;
         }
         .container button:hover:enabled {
-            background: #ff7e83;
+            background: #3a89fc;
         }
         .message {
             margin-top: 10px;
             font-size: 14px;
+            color: #d1d1d1;
         }
     </style>
 </head>
@@ -96,7 +100,7 @@
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ content: message })
+                    body: JSON.stringify({ content: message + " @here" })
                 });
 
                 if (response.ok) {
